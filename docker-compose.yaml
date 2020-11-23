@@ -1,0 +1,41 @@
+version: '3.4'
+services:
+  coredns:
+    container_name: coredns
+    hostname: coredns
+    domainname: example.jp
+    image: coredns/coredns:1.8.0
+    command: -conf /etc/coredns/Corefile
+    volumes:
+      - "./coredns:/etc/coredns"
+    networks:
+      test:
+        ipv4_address: 172.21.53.10
+  nsd:
+    container_name: nsd
+    hostname: nsd
+    domainname: example.jp
+    image: mimuret/nsd
+    volumes:
+      - "./nsd:/etc/nsd/config"
+    networks:
+      test:
+        ipv4_address: 172.21.53.11
+  prom:
+    container_name: prom
+    hostname: prom
+    domainname: example.jp
+    image: prom/prometheus
+    volumes:
+      - "./prometheus/config:/etc/prometheus"
+      - "./prometheus/tsdb:/prometheus"
+    networks:
+      test:
+        ipv4_address: 172.21.53.12
+    ports:
+      - "127.0.0.1:9090:9090"
+networks:
+  test:
+    ipam:
+      config:
+        - subnet: 172.21.53.0/24

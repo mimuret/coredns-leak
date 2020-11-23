@@ -1,0 +1,14 @@
+example.jp:53 {
+    errors
+    health
+    reload
+    log
+    auto {
+      directory /etc/coredns/zones (.*) {1}
+      reload 30s
+    }
+    transfer {
+      to *
+    }
+    prometheus :9153
+}
